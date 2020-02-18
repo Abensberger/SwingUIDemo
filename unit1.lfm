@@ -6,6 +6,8 @@ object Form1: TForm1
   Caption = 'Swing UI Demo'
   ClientHeight = 662
   ClientWidth = 960
+  OnClose = FormClose
+  OnCreate = FormCreate
   LCLVersion = '2.0.2.0'
   object pnlLeft: TPanel
     Left = 0
@@ -16,11 +18,12 @@ object Form1: TForm1
     BevelOuter = bvNone
     ClientHeight = 662
     ClientWidth = 205
-    Color = 592321
+    Color = clGreen
     Font.Color = clWindow
     ParentColor = False
     ParentFont = False
     TabOrder = 0
+    OnClick = actExitExecute
     object Panel1: TPanel
       Left = 0
       Height = 50
@@ -572,6 +575,7 @@ object Form1: TForm1
         Align = alLeft
         AutoSize = True
         Center = True
+        OnClick = actExitExecute
         OnMouseEnter = Label1MouseEnter
         OnMouseLeave = Label1MouseLeave
         Picture.Data = {
@@ -607,6 +611,7 @@ object Form1: TForm1
         Layout = tlCenter
         ParentColor = False
         ParentFont = False
+        OnClick = actExitExecute
         OnMouseEnter = Label1MouseEnter
         OnMouseLeave = Label1MouseLeave
       end
@@ -634,7 +639,7 @@ object Form1: TForm1
       BevelOuter = bvNone
       ClientHeight = 58
       ClientWidth = 755
-      Color = 230
+      Color = clLime
       ParentColor = False
       ParentFont = False
       TabOrder = 0
@@ -771,12 +776,81 @@ object Form1: TForm1
         end
       end
     end
+    object ExtendedNotebook1: TExtendedNotebook
+      Left = 0
+      Height = 604
+      Top = 58
+      Width = 755
+      ActivePage = TabSheet6
+      Align = alClient
+      TabIndex = 6
+      TabOrder = 1
+      object TabSheet1: TTabSheet
+        Caption = 'TabSheet1'
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'TabSheet2'
+      end
+      object TabSheet3: TTabSheet
+        Caption = 'TabSheet3'
+      end
+      object TabSheet4: TTabSheet
+        Caption = 'TabSheet4'
+      end
+      object TabSheet5: TTabSheet
+        Caption = 'TabSheet5'
+      end
+      object TabSheet7: TTabSheet
+        Caption = 'TabSheet7'
+      end
+      object TabSheet6: TTabSheet
+        Caption = 'Options'
+        ClientHeight = 576
+        ClientWidth = 747
+        object Label10: TLabel
+          Left = 8
+          Height = 15
+          Top = 8
+          Width = 164
+          Caption = 'Farbe der vertikalen Menüleiste'
+          Font.Color = clBlue
+          Font.Style = [fsUnderline]
+          ParentColor = False
+          ParentFont = False
+          OnClick = Label10Click
+        end
+        object Shape1: TShape
+          Left = 200
+          Height = 25
+          Top = 8
+          Width = 48
+        end
+        object Label11: TLabel
+          Left = 8
+          Height = 15
+          Top = 40
+          Width = 179
+          Caption = 'Farbe der horizontalen Menüleiste'
+          Font.Color = clBlue
+          Font.Style = [fsUnderline]
+          ParentColor = False
+          ParentFont = False
+          OnClick = Label11Click
+        end
+        object Shape2: TShape
+          Left = 200
+          Height = 25
+          Top = 40
+          Width = 48
+        end
+      end
+    end
   end
   object ImageList1: TImageList
     Height = 48
     Width = 48
-    Left = 283
-    Top = 119
+    Left = 240
+    Top = 8
     Bitmap = {
       4C69090000003000000030000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -3372,5 +3446,40 @@ object Form1: TForm1
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000
     }
+  end
+  object ActionList1: TActionList
+    Left = 312
+    Top = 8
+    object actExit: TAction
+      Caption = 'Exit'
+      OnExecute = actExitExecute
+    end
+  end
+  object ColorDialog1: TColorDialog
+    Color = clBlack
+    CustomColors.Strings = (
+      'ColorA=000000'
+      'ColorB=000080'
+      'ColorC=008000'
+      'ColorD=008080'
+      'ColorE=800000'
+      'ColorF=800080'
+      'ColorG=808000'
+      'ColorH=808080'
+      'ColorI=C0C0C0'
+      'ColorJ=0000FF'
+      'ColorK=00FF00'
+      'ColorL=00FFFF'
+      'ColorM=FF0000'
+      'ColorN=FF00FF'
+      'ColorO=FFFF00'
+      'ColorP=FFFFFF'
+      'ColorQ=C0DCC0'
+      'ColorR=F0CAA6'
+      'ColorS=F0FBFF'
+      'ColorT=A4A0A0'
+    )
+    Left = 472
+    Top = 88
   end
 end
