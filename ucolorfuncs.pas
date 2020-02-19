@@ -10,6 +10,9 @@ uses
 function Dunkler(farbe: TColor; prozent: Byte): TColor;
 function Heller(farbe: TColor; prozent: Byte): TColor;
 function Helligkeit(farbe: TColor) : Integer;
+function GetContrastColorBlackOrWhite(const AColor: TColor): TColor; //Dieser Funktion kann man eine beliebige Farbe übergeben 
+                                                                     //und man bekommt entweder schwarz oder weiß zurückgegeben, 
+                                                                     //je nachdem was besser zur Hintergrundfarbe passt.
 
 implementation
 
@@ -53,5 +56,20 @@ begin
   result := round(sqrt(0.299*r*r + 0.587*g*g + 0.114*b*b));
 end;
 
+function GetContrastColorBlackOrWhite(const AColor: TColor): TColor;
+var
+  R, G, B: single;
+begin
+  R := GetRValue(AColor) * 0.25;
+  G := GetGValue(AColor) * 0.625;
+  B := GetBValue(AColor) * 0.125;
+ 
+  if (R + G + B) > 128 then begin
+    result := clBlack;
+  end else begin
+    result := clWhite;
+  end; 
+  
+end;
 end.
 
