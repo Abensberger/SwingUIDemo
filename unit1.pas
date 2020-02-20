@@ -11,8 +11,12 @@ uses
   ColorSpeedButton,
   ExtendedNotebook,
   IniFiles,
-  SQLite3DS, DB, LazFileUtils, lclIntf,
-  ustrfuncs;
+  SQLite3DS, DB,
+  LazFileUtils,
+  lclIntf,
+  ustrfuncs,
+  laz2_DOM,
+  laz2_XMLRead;
 
 type
 
@@ -46,6 +50,7 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
+    OpenDialog1: TOpenDialog;
     pnlClient: TPanel;
     pnlLeft: TPanel;
     pnlTop: TPanel;
@@ -153,9 +158,35 @@ begin
 end;
 
 procedure TForm1.actCustomerFileImportExecute(Sender: TObject);
+var
+  doc : TXMLDocument;
+  child : TDOMNode;
 begin
   //
   ShowMessage('Hier startet in Kürze der Datenimport');
+  if OpenDialog1.Execute then
+  begin
+  // Read in xml file from disk
+    try
+      ReadXMLFile(Doc, OpenDialog1.FileName);
+      Child := Doc.DocumentElement.FirstChild;
+      while Assigned(Child) do
+      begin
+        ContactsDataset.Append;
+        ContactsDataset.FieldByName('KdNr').AsFloat := 1000000 + StrToInt(TDOMElement(Child).GetAttribute('id'));
+        ContactsDataset.FieldByName('Kampagne').AsString := 'Test-Kampagne';
+        ContactsDataset.FieldByName('Name').AsString := TDOMElement(Child).GetAttribute('firmenname');
+        ContactsDataset.FieldByName('Email').AsString := TDOMElement(Child).GetAttribute('email');
+        ContactsDataset.FieldByName('Telefon').AsString := format('(%s) %s',[ TDOMElement(Child).GetAttribute('vorwahl'),
+                                                             TDOMElement(Child).GetAttribute('telefon')]);
+        ContactsDataset.Post;
+        Child := Child.NextSibling;
+      end;
+    finally
+      doc.free;
+    end;
+  end;
+
 end;
 
 procedure TForm1.cmbThemesChange(Sender: TObject);
@@ -189,7 +220,10 @@ begin
   pnlTop.Color := ApplColors[1];
   Colorize(ColorSpeedButton9);
   Colorize(ColorSpeedButton10);
+
+  DBGrid1.FixedColor:= ApplColors[1];
 end;
+
 
 procedure TForm1.ColorSpeedButton1Click(Sender: TObject);
 begin
