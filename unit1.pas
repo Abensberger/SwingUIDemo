@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  Buttons, ComCtrls, ActnList, ExtendedNotebook, IniFiles;
+  Buttons, ComCtrls, ActnList, BGRASpeedButton, BGRAResizeSpeedButton, BCButton,
+  ColorSpeedButton, ExtendedNotebook, IniFiles;
 
 type
 
@@ -16,18 +17,18 @@ type
     actExit: TAction;
     ActionList1: TActionList;
     ColorDialog1: TColorDialog;
+    ColorSpeedButton1: TColorSpeedButton;
+    ColorSpeedButton10: TColorSpeedButton;
+    ColorSpeedButton2: TColorSpeedButton;
+    ColorSpeedButton3: TColorSpeedButton;
+    ColorSpeedButton4: TColorSpeedButton;
+    ColorSpeedButton5: TColorSpeedButton;
+    ColorSpeedButton6: TColorSpeedButton;
+    ColorSpeedButton7: TColorSpeedButton;
+    ColorSpeedButton8: TColorSpeedButton;
+    ColorSpeedButton9: TColorSpeedButton;
     ExtendedNotebook1: TExtendedNotebook;
-    Image1: TImage;
-    Image10: TImage;
-    Image12: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Image5: TImage;
     Image6: TImage;
-    Image7: TImage;
-    Image8: TImage;
-    Image9: TImage;
     ImageList1: TImageList;
     Label1: TLabel;
     Label10: TLabel;
@@ -38,18 +39,6 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
-    Label8: TLabel;
-    Label9: TLabel;
-    Panel1: TPanel;
-    Panel10: TPanel;
-    Panel2: TPanel;
-    Panel3: TPanel;
-    Panel4: TPanel;
-    Panel5: TPanel;
-    Panel6: TPanel;
-    Panel7: TPanel;
-    Panel8: TPanel;
-    Panel9: TPanel;
     pnlClient: TPanel;
     pnlLeft: TPanel;
     pnlTop: TPanel;
@@ -61,18 +50,17 @@ type
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
-    TabSheet7: TTabSheet;
     procedure actExitExecute(Sender: TObject);
+    procedure ColorSpeedButton1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure Image6Click(Sender: TObject);
     procedure Label10Click(Sender: TObject);
     procedure Label11Click(Sender: TObject);
-    procedure Label1MouseEnter(Sender: TObject);
-    procedure Label1MouseLeave(Sender: TObject);
   private
     ConfigDir : String;
     Ini : TIniFile;
+    procedure Colorize(aSpeedButton:TColorSpeedButton);
   public
 
   end;
@@ -89,36 +77,39 @@ uses
 
 { TForm1 }
 
-procedure TForm1.Label1MouseEnter(Sender: TObject);
-var
-  Farbe : TColor;
-begin
-  Farbe := TPanel(TWinControl(Sender).Parent).Parent.Color;
-  if Helligkeit(Farbe) <= 128 then
-    TPanel(TWinControl(Sender).Parent).Color:= Heller(Farbe,30)
-  else
-    TPanel(TWinControl(Sender).Parent).Color:= Dunkler(Farbe,30)
-end;
 
-procedure TForm1.Label1MouseLeave(Sender: TObject);
+procedure TForm1.Colorize(aSpeedButton: TColorSpeedButton);
+var aColor : TColor;
 begin
-  TPanel(TWinControl(Sender).Parent).ParentColor := True;
-//  TPanel(TWinControl(Sender).Parent).Color :=
-//         TPanel(TWinControl(Sender).Parent).Parent.Color
-end;
-
-procedure TForm1.Image6Click(Sender: TObject);
-begin
-  if pnlLeft.Width > 48 then
+  aColor := TPanel(aSpeedButton.Parent).Color;
+  if Helligkeit(aColor) > 128 then
   begin
-    pnlLeft.Width := 48;
-    pnlLeft.ShowHint:=True;
+    aSpeedButton.StateNormal.Color := aColor;
+    aSpeedButton.StateHover.Color  := ucolorfuncs.Dunkler(aColor,20);
+    aSpeedButton.StateActive.Color := ucolorfuncs.Dunkler(aColor,40);
+//    aSpeedButton.Font.Color        := clBlack;
   end
   else
   begin
-    pnlLeft.Width := 205;
-    pnlLeft.ShowHint:=False;
+    aSpeedButton.StateNormal.Color := aColor;
+    aSpeedButton.StateHover.Color  := ucolorfuncs.Heller(aColor,25);
+    aSpeedButton.StateActive.Color := ucolorfuncs.Heller(aColor,50);
+//    aSpeedButton.Font.Color        := clWhite;
   end;
+
+
+end;
+
+procedure TForm1.Image6Click(Sender: TObject);
+var
+  bCollapse : Boolean;
+begin
+  bCollapse := pnlLeft.Width > pnlLeft.Constraints.MinWidth;
+  if bCollapse then
+    pnlLeft.Width := pnlLeft.Constraints.MinWidth
+  else
+    pnlLeft.Width := pnlLeft.Constraints.MaxWidth;
+  pnlLeft.ShowHint := bCollapse;
 end;
 
 procedure TForm1.Label10Click(Sender: TObject);
@@ -130,6 +121,14 @@ begin
     pnlLeft.Color := ColorDialog1.Color;
     pnlLeft.Invalidate;
   end;
+  Colorize(ColorSpeedButton1);
+  Colorize(ColorSpeedButton2);
+  Colorize(ColorSpeedButton3);
+  Colorize(ColorSpeedButton4);
+  Colorize(ColorSpeedButton5);
+  Colorize(ColorSpeedButton6);
+  Colorize(ColorSpeedButton7);
+  Colorize(ColorSpeedButton8);
 end;
 
 procedure TForm1.Label11Click(Sender: TObject);
@@ -141,12 +140,18 @@ begin
     pnlTop.Color := ColorDialog1.Color;
     pnlTop.Invalidate;
   end;
-
+  Colorize(ColorSpeedButton9);
+  Colorize(ColorSpeedButton10);
 end;
 
 procedure TForm1.actExitExecute(Sender: TObject);
 begin
   close;
+end;
+
+procedure TForm1.ColorSpeedButton1Click(Sender: TObject);
+begin
+  ExtendedNotebook1.ActivePageIndex:= TColorSpeedButton(Sender).Tag-1;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -168,7 +173,19 @@ begin
   pnlTop.Color  := StringToColor(Ini.ReadString('Farben','PanelTop','clWhite'));
   Shape1.Brush.Color := pnlLeft.Color;
   Shape2.Brush.Color := pnlTop.Color;
-  ShowMessage(fname);
+//  ShowMessage(fname);
+  Colorize(ColorSpeedButton1);
+  Colorize(ColorSpeedButton2);
+  Colorize(ColorSpeedButton3);
+  Colorize(ColorSpeedButton4);
+  Colorize(ColorSpeedButton5);
+  Colorize(ColorSpeedButton6);
+  Colorize(ColorSpeedButton7);
+  Colorize(ColorSpeedButton8);
+  Colorize(ColorSpeedButton9);
+  Colorize(ColorSpeedButton10);
+  ExtendedNotebook1.ActivePageIndex:=0;
+  ExtendedNotebook1.ShowTabs:=False;
 end;
 
 

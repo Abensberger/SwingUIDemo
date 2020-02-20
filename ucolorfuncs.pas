@@ -60,9 +60,9 @@ function GetContrastColorBlackOrWhite(const AColor: TColor): TColor;
 var
   R, G, B: single;
 begin
-  R := GetRValue(AColor) * 0.25;
-  G := GetGValue(AColor) * 0.625;
-  B := GetBValue(AColor) * 0.125;
+  R := Red(AColor) * 0.25;
+  G := Green(AColor) * 0.625;
+  B := Blue(AColor) * 0.125;
  
   if (R + G + B) > 128 then begin
     result := clBlack;
